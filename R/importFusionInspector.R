@@ -1,0 +1,49 @@
+#' read the results from runnning FusionInspector
+#'
+#' Note: there may not be perfect match between the fusions found by STAR-Fusion
+#' and FusionInspector (since the latter reruns STAR on the mini contig; also,
+#' selfie fusions are ignored).
+#' If no match can be found, the whole fusion is skipped
+#'
+#' @export
+importFusionInspector <- function (filename='FusionInspector-inspect/finspector.igv.FusionJuncSpan',
+                                  limit=Inf) {
+    ## Try to read the FusionInspector report.
+    ## Within one 'scaffold', only keep the leftmost and rightmost coordinate
+    report <- withCallingHandlers({
+        col_types_fusioninspector = readr::cols_only(
+          "#scaffold" = col_character(),
+          "fusion_break_name" = col_skip(),
+          "break_left" = col_integer(),
+          "break_right" = col_integer(),
+          "num_junction_reads" = col_skip(),
+          "num_spanning_frags" = col_skip(),
+          "spanning_frag_coords" = col_skip()
+          )
+        if (missing(limit)) {
+            readr::read_tsv(
+              file = filename,
+              col_types = col_types_fusioninspector)
+        } else {
+            readr::read_tsv(
+              file = filename,
+              col_types = col_types_fusioninspector,
+              n_max = limit)
+        }
+    },
+      error = function(cond) {
+          message(paste0("Reading ", filename, " caused an error: ", cond[[1]]))
+          stop(cond)
+      },
+      warning = function(cond) {
+          message(paste0("Reading ", filename, " caused a warning: ", cond[[1]]))
+          warning(cond)
+      })
+    colnames(report)[1] <- 'id'
+    d <-
+      data.frame(id=with(report, id[ !duplicated(id) ]),
+                 start=with(report, tapply(break_left, id, min)),
+                 end=with(report, tapply(break_right, id, max)))
+    rownames(d) <- d$id
+    d
+}                                        #importFusionInspector
