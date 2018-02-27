@@ -1,9 +1,15 @@
 #' read the results from runnning FusionInspector
 #'
-#' Note: there may not be perfect match between the fusions found by STAR-Fusion
-#' and FusionInspector (since the latter reruns STAR on the mini contig; also,
-#' selfie fusions are ignored).
-#' If no match can be found, the whole fusion is skipped
+#' This function is called when \code{\link{importStarfusion}} is called
+#' with \code{useFusionInspector=TRUE}. It will override coordinates
+#' (chromosome, strand, and breakpoint) with those corresponding to
+#' FusionInspector's "mini genome". The resulting list of fusion objects
+#' can currently only be plotted with \code{\links{plotFusionReadsSimple}}.
+#'
+#' Note: there may not be perfect match between the fusions found by
+#' STAR-Fusion and FusionInspector (since the latter reruns STAR on the
+#' mini contig; also, selfie fusions are ignored).  If no match can be
+#' found, the whole fusion is skipped. 
 #'
 #' @export
 importFusionInspector <- function (filename='FusionInspector-inspect/finspector.igv.FusionJuncSpan',
