@@ -27,9 +27,9 @@ plotFusionReadsSimple <- function(fusion, leftFlank=10000, rightFlank=leftFlank)
 #' Plot fusion with separate junction and spanning reads
 #'
 #' @export
-plotContigReads <- function(fusion, bam.junction, bam.spanning, 
+plotContigReads <- function(fusion, bam.split, bam.spanning, 
                             leftFlank=1000, rightFlank=leftFlank) {
-    ## as plotFusionReads, but with separate tracks for spanning and junction
+    ## as plotFusionReads, but with separate tracks for spanning and split
     need <- "starfusion+fusioninspector"
     if (fusion@fusionTool != need)
       stop("Wrong object type, need: ", need, " got: ",  fusion@fusionTool)
@@ -38,28 +38,34 @@ plotContigReads <- function(fusion, bam.junction, bam.spanning,
     spanning <- addFusionReadsAlignment(fusion, bam.spanning,
                                         chromosome=fusion@geneA@chromosome)
     spanning@fusionReadsAlignment@name <- 'spanning'
-    junction <- addFusionReadsAlignment(fusion, bam.junction,
+
+    split <- addFusionReadsAlignment(fusion, bam.split,
                                         chromosome=fusion@geneA@chromosome)
-    junction@fusionReadsAlignment@name <- 'junction'
+    split@fusionReadsAlignment@name <- 'split'
+
+    nspanning <- fusion@spanningReadsCount
+    nsplit <- fusion@splitReadsCount
+
+    rm(fusion)
     
     Gviz::displayPars(spanning@fusionReadsAlignment) <- list(
       showTitle = TRUE,
-      showMismatches = FALSE,
+      showMismatches = TRUE,
       col='red',
       fill='red'
       )
 
-    Gviz::displayPars(junction@fusionReadsAlignment) <- list(
+    Gviz::displayPars(split@fusionReadsAlignment) <- list(
       showTitle = TRUE,
-      showMismatches = FALSE,
+      showMismatches = TRUE,
       col='blue',
       fill='blue'
       )
-    
+
     nf <- grid::grid.layout(
       nrow = 2,
       ncol = 1,
-      heights = grid::unit(c(2, 2), "null"),
+      heights = grid::unit(c(nsplit, nspanning), "null"),
       widths = grid::unit(c(1, 1), "null"))
     
     grid::grid.newpage()
@@ -67,10 +73,10 @@ plotContigReads <- function(fusion, bam.junction, bam.spanning,
 
     grid::pushViewport(grid::viewport(layout.pos.row = 1, layout.pos.col = 1))
     Gviz::plotTracks(
-      junction@fusionReadsAlignment,
-      from = junction@geneA@breakpoint - leftFlank,
-      to = junction@geneB@breakpoint + rightFlank,
-      chromosome = junction@fusionReadsAlignment@chromosome,
+      split@fusionReadsAlignment,
+      from = split@geneA@breakpoint - leftFlank,
+      to = split@geneB@breakpoint + rightFlank,
+      chromosome = split@fusionReadsAlignment@chromosome,
       type = "pileup",
       add = TRUE)
     grid::popViewport(1)
