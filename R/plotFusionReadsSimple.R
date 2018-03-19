@@ -26,10 +26,18 @@ plotFusionReadsSimple <- function(fusion, leftFlank=10000, rightFlank=leftFlank)
 
 #' Plot fusion with separate junction and spanning reads
 #'
+#' @param fusion Fusion object
+#' @param bam.split name of bam file with junction reads in mini contig coords
+#' @param bam.spanning name of bam file with spanning reads in mini contig coords
+#' @param leftFlank,rightFlank how much to show left(right) of the split
 #' @export
-plotContigReads <- function(fusion, bam.split, bam.spanning, 
-                            leftFlank=1000, rightFlank=leftFlank) {
+plotContigReads <- function(fusion,
+                            bam.split,
+                            bam.spanning, 
+                            leftFlank=1000,
+                            rightFlank=leftFlank) {
     ## as plotFusionReads, but with separate tracks for spanning and split
+    ## 
     need <- "starfusion+fusioninspector"
     if (fusion@fusionTool != need)
       stop("Wrong object type, need: ", need, " got: ",  fusion@fusionTool)
