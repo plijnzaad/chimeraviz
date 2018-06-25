@@ -8,7 +8,10 @@
 #' star-fusion.fusion_candidates.final.abridged results file.
 #' @param genome_version Which genome was used in mapping (hg19, hg38, etc.).
 #' @param limit A limit on how many lines to read.
-#'
+#' @param use_fusion_inspector If STAR-Fusion was run with the FusionInpspector
+#'    option, specifying \code{FALSE} will read the fusion objects
+#'    from the 'mini genome' it creates. See \code{\link{importFusionInspector}} and
+#'    \code{\link{plotFusionReadsSimple}}
 #' @return A list of Fusion objects.
 #'
 #' @examples

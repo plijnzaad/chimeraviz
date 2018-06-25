@@ -725,7 +725,8 @@ get_transcripts_ensembl_db <- function(fusion, edb) {
 #'
 #' @param fusion The fusion object to add a genomic alignment to.
 #' @param bamfile The bam file containing the fusion reads plotted to the fusion
-#' sequence.
+#'    sequence.
+#' @param chromosome The chromosome to use
 #'
 #' @return An updated fusion object with fusion@fusion_reads_alignment set.
 #'
@@ -747,7 +748,7 @@ get_transcripts_ensembl_db <- function(fusion, edb) {
 #' fusion <- add_fusion_reads_alignment(fusion, bamfile5267)
 #'
 #' @export
-addFusionReadsAlignment <- function(fusion, bamfile, chromosome="chrNA") {
+add_fusion_reads_alignment <- function(fusion, bamfile, chromosome="chrNA") {
   # Check if we got a fusion object
   if (class(fusion) != "Fusion") {
     stop("fusion argument must be an object of type Fusion")
@@ -760,7 +761,7 @@ addFusionReadsAlignment <- function(fusion, bamfile, chromosome="chrNA") {
     # any reference genome.
     chromosome = chromosome,
     name="Fusion Reads",
-    genome = fusion@genomeVersion)
+    genome = fusion@genome_version)
 
   # Return new fusion object, now with the fusion read alignment
   fusion@fusion_reads_alignment <- fusion_reads_alignment

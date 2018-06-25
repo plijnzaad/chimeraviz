@@ -2,10 +2,10 @@
 % Please edit documentation in R/plotFusionReadsSimple.R
 \name{plotFusionReadsSimple}
 \alias{plotFusionReadsSimple}
-\title{Simple versin of plotFusionReads}
+\title{Simple version of plotFusionReads}
 \usage{
-plotFusionReadsSimple(fusion)
+plotFusionReadsSimple(fusion, leftFlank = 10000, rightFlank = leftFlank)
 }
 \description{
-Simple versin of plotFusionReads
+Simple version of plotFusionReads
 }

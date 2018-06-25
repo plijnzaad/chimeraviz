@@ -1,10 +1,10 @@
 #' read the results from runnning FusionInspector
 #'
-#' This function is called when \code{\link{importStarfusion}} is called
-#' with \code{useFusionInspector=TRUE}. It will override coordinates
+#' This function is called when \code{\link{import_star_fusion}} is called
+#' with \code{use_fusion_inspector=TRUE}. It will override coordinates
 #' (chromosome, strand, and breakpoint) with those corresponding to
 #' FusionInspector's "mini genome". The resulting list of fusion objects
-#' can currently only be plotted with \code{\links{plotFusionReadsSimple}}.
+#' can currently only be plotted with \code{\link{plotFusionReadsSimple}}.
 #'
 #' Note: there may not be perfect match between the fusions found by
 #' STAR-Fusion and FusionInspector (since the latter reruns STAR on the

@@ -190,7 +190,7 @@ plot_circle <- function(fusion_list) {
   if (!fusion_list[[1]]@genome_version %in% list("hg19", "hg38", "mm10")) {
     stop(
       paste0(
-        "Invalid input. genomeVersion must be either \"hg19\", \"hg38\" or ",
+        "Invalid input. genome_version must be either \"hg19\", \"hg38\" or ",
         "\"mm10\"."
       )
     )
@@ -334,7 +334,7 @@ plot_circle <- function(fusion_list) {
 
   if (!fusion_list[[1]]@genome_version %in% list("hg19", "hg38")) {
     ArgumentCheck::addError(
-      msg = paste0("The genomeVersion of the Fusion objects must be either",
+      msg = paste0("The genome_version of the Fusion objects must be either",
                    "'hg19' or 'hg38'."),
       argcheck = argument_checker
     )
