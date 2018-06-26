@@ -2,7 +2,7 @@
 #'
 #' @export
 plotFusionReadsSimple <- function(fusion, leftFlank=10000, rightFlank=leftFlank) {
-  Gviz::displayPars(fusion@fusionReadsAlignment) <- list(
+  Gviz::displayPars(fusion@fusion_reads_alignment) <- list(
     showTitle = FALSE,
     showMismatches = FALSE # Show mismatched reads?
   )
@@ -15,10 +15,10 @@ plotFusionReadsSimple <- function(fusion, leftFlank=10000, rightFlank=leftFlank)
   
   grid::grid.newpage()
   Gviz::plotTracks(
-    fusion@fusionReadsAlignment,
+    fusion@fusion_reads_alignment,
     from = fusion@gene_upstream@breakpoint-leftFlank,
     to = fusion@gene_downstream@breakpoint+rightFlank,
-    chromosome = fusion@fusionReadsAlignment@chromosome,
+    chromosome = fusion@fusion_reads_alignment@chromosome,
     type = "pileup",
     add = TRUE)
 }                                       #plotFusionReadsSimple
@@ -45,25 +45,25 @@ plotContigReads <- function(fusion,
     options(ucscChromosomeNames=FALSE)
     spanning <- add_fusion_reads_alignment(fusion, bam.spanning,
                                         chromosome=fusion@gene_upstream@chromosome)
-    spanning@fusionReadsAlignment@name <- 'spanning'
+    spanning@fusion_reads_alignment@name <- 'spanning'
 
     split <- add_fusion_reads_alignment(fusion, bam.split,
                                         chromosome=fusion@gene_upstream@chromosome)
-    split@fusionReadsAlignment@name <- 'split'
+    split@fusion_reads_alignment@name <- 'split'
 
     nspanning <- fusion@spanningReadsCount
     nsplit <- fusion@splitReadsCount
 
     rm(fusion)
     
-    Gviz::displayPars(spanning@fusionReadsAlignment) <- list(
+    Gviz::displayPars(spanning@fusion_reads_alignment) <- list(
       showTitle = TRUE,
       showMismatches = TRUE,
       col='red',
       fill='red'
       )
 
-    Gviz::displayPars(split@fusionReadsAlignment) <- list(
+    Gviz::displayPars(split@fusion_reads_alignment) <- list(
       showTitle = TRUE,
       showMismatches = TRUE,
       col='blue',
@@ -81,20 +81,20 @@ plotContigReads <- function(fusion,
 
     grid::pushViewport(grid::viewport(layout.pos.row = 1, layout.pos.col = 1))
     Gviz::plotTracks(
-      split@fusionReadsAlignment,
+      split@fusion_reads_alignment,
       from = split@gene_upstream@breakpoint - leftFlank,
       to = split@gene_downstream@breakpoint + rightFlank,
-      chromosome = split@fusionReadsAlignment@chromosome,
+      chromosome = split@fusion_reads_alignment@chromosome,
       type = "pileup",
       add = TRUE)
     grid::popViewport(1)
 
     grid::pushViewport(grid::viewport(layout.pos.row = 2, layout.pos.col = 1))
     Gviz::plotTracks(
-      spanning@fusionReadsAlignment,
+      spanning@fusion_reads_alignment,
       from = spanning@gene_upstream@breakpoint - leftFlank,
       to = spanning@gene_downstream@breakpoint + rightFlank,
-      chromosome = spanning@fusionReadsAlignment@chromosome,
+      chromosome = spanning@fusion_reads_alignment@chromosome,
       type = "pileup",
       add = TRUE)
     grid::popViewport(1)
