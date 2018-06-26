@@ -51,8 +51,8 @@ plotContigReads <- function(fusion,
                                         chromosome=fusion@gene_upstream@chromosome)
     split@fusion_reads_alignment@name <- 'split'
 
-    nspanning <- fusion@spanningReadsCount
-    nsplit <- fusion@splitReadsCount
+    nspanning <- fusion@spanning_reads_count
+    nsplit <- fusion@split_reads_count
 
     rm(fusion)
     
