@@ -175,7 +175,7 @@ import_starfusion <- function (filename, genome_version, limit,
         ## first save them:
         fusion_tool_specific_data[['orig_chromosome_upstream']] <- chromosome_upstream
         fusion_tool_specific_data[['orig_breakpoint_upstream']] <- breakpoint_upstream
-        fusion_tool_specific_data[['orig_strand_upstream']] <- strand_uptream
+        fusion_tool_specific_data[['orig_strand_upstream']] <- strand_upstream
         fusion_tool_specific_data[['orig_chromosome_downstream']] <- chromosome_downstream
         fusion_tool_specific_data[['orig_breakpoint_downstream']] <- breakpoint_downstream
         fusion_tool_specific_data[['orig_strand_downstream']] <- strand_downstream
