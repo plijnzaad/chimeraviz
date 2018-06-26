@@ -87,7 +87,7 @@ import_starfusion <- function (filename, genome_version, limit,
     }
   )
 
-  if(useFusionInspector)
+  if(use_fusion_inspector)
       fi.table <- importFusionInspector(limit=limit+10)
 
   # Set variables
