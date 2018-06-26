@@ -5,8 +5,10 @@
 \title{read the results from runnning FusionInspector}
 \usage{
 
-  importFusionInspector(filename = "FusionInspector-inspect/finspector.igv.FusionJuncSpan",
-  limit = Inf)
+  importFusionInspector(filename = "FusionInspector-inspect/finspector.igv.FusionJuncSpan")
+}
+\arguments{
+\item{filename}{Which file to import. Note that}
 }
 \description{
 This function is called when \code{\link{import_star_fusion}} is called

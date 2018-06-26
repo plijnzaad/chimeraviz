@@ -11,6 +11,10 @@
 #' mini contig; also, selfie fusions are ignored).  If no match can be
 #' found, the whole fusion is skipped. 
 #'
+#' @param filename Which file to import. Note that 
+#'
+#' @value The report is returned as \code{data.frame}
+#'
 #' @export
 importFusionInspector <- function (filename='FusionInspector-inspect/finspector.igv.FusionJuncSpan') {
     ## Try to read the FusionInspector report.
