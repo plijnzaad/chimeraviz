@@ -43,11 +43,11 @@ plotContigReads <- function(fusion,
       stop("Wrong object type, need: ", need, " got: ",  fusion@fusionTool)
 
     options(ucscChromosomeNames=FALSE)
-    spanning <- addFusionReadsAlignment(fusion, bam.spanning,
+    spanning <- add_fusion_reads_alignment(fusion, bam.spanning,
                                         chromosome=fusion@geneA@chromosome)
     spanning@fusionReadsAlignment@name <- 'spanning'
 
-    split <- addFusionReadsAlignment(fusion, bam.split,
+    split <- add_fusion_reads_alignment(fusion, bam.split,
                                         chromosome=fusion@geneA@chromosome)
     split@fusionReadsAlignment@name <- 'split'
 
