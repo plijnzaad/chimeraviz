@@ -13,7 +13,7 @@
 #'
 #' @param filename Which file to import. Note that 
 #'
-#' @value The report is returned as \code{data.frame}
+#' @return The report is returned as \code{data.frame}
 #'
 #' @export
 import_fusion_inspector <- function (filename='FusionInspector-inspect/finspector.igv.FusionJuncSpan') {
