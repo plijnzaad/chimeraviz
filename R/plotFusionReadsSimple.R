@@ -16,8 +16,8 @@ plotFusionReadsSimple <- function(fusion, leftFlank=10000, rightFlank=leftFlank)
   grid::grid.newpage()
   Gviz::plotTracks(
     fusion@fusionReadsAlignment,
-    from = fusion@geneA@breakpoint-leftFlank,
-    to = fusion@geneB@breakpoint+rightFlank,
+    from = fusion@gene_upstream@breakpoint-leftFlank,
+    to = fusion@gene_downstream@breakpoint+rightFlank,
     chromosome = fusion@fusionReadsAlignment@chromosome,
     type = "pileup",
     add = TRUE)
@@ -44,11 +44,11 @@ plotContigReads <- function(fusion,
 
     options(ucscChromosomeNames=FALSE)
     spanning <- add_fusion_reads_alignment(fusion, bam.spanning,
-                                        chromosome=fusion@geneA@chromosome)
+                                        chromosome=fusion@gene_upstream@chromosome)
     spanning@fusionReadsAlignment@name <- 'spanning'
 
     split <- add_fusion_reads_alignment(fusion, bam.split,
-                                        chromosome=fusion@geneA@chromosome)
+                                        chromosome=fusion@gene_upstream@chromosome)
     split@fusionReadsAlignment@name <- 'split'
 
     nspanning <- fusion@spanningReadsCount
@@ -82,8 +82,8 @@ plotContigReads <- function(fusion,
     grid::pushViewport(grid::viewport(layout.pos.row = 1, layout.pos.col = 1))
     Gviz::plotTracks(
       split@fusionReadsAlignment,
-      from = split@geneA@breakpoint - leftFlank,
-      to = split@geneB@breakpoint + rightFlank,
+      from = split@gene_upstream@breakpoint - leftFlank,
+      to = split@gene_downstream@breakpoint + rightFlank,
       chromosome = split@fusionReadsAlignment@chromosome,
       type = "pileup",
       add = TRUE)
@@ -92,8 +92,8 @@ plotContigReads <- function(fusion,
     grid::pushViewport(grid::viewport(layout.pos.row = 2, layout.pos.col = 1))
     Gviz::plotTracks(
       spanning@fusionReadsAlignment,
-      from = spanning@geneA@breakpoint - leftFlank,
-      to = spanning@geneB@breakpoint + rightFlank,
+      from = spanning@gene_upstream@breakpoint - leftFlank,
+      to = spanning@gene_downstream@breakpoint + rightFlank,
       chromosome = spanning@fusionReadsAlignment@chromosome,
       type = "pileup",
       add = TRUE)
