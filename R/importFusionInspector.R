@@ -12,8 +12,7 @@
 #' found, the whole fusion is skipped. 
 #'
 #' @export
-importFusionInspector <- function (filename='FusionInspector-inspect/finspector.igv.FusionJuncSpan',
-                                  limit=Inf) {
+importFusionInspector <- function (filename='FusionInspector-inspect/finspector.igv.FusionJuncSpan') {
     ## Try to read the FusionInspector report.
     ## Within one 'scaffold', only keep the leftmost and rightmost coordinate
     report <- withCallingHandlers({
