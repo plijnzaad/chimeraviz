@@ -17,7 +17,7 @@ star-fusion.fusion_candidates.final.abridged results file.}
 
 \item{use_fusion_inspector}{If STAR-Fusion was run with the FusionInpspector
 option, specifying \code{FALSE} will read the fusion objects
-from the 'mini genome' it creates. See \code{\link{importFusionInspector}} and
+from the 'mini genome' it creates. See \code{\link{import_fusion_inspector}} and
 \code{\link{plotFusionReadsSimple}}}
 }
 \value{

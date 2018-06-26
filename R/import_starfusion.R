@@ -10,7 +10,7 @@
 #' @param limit A limit on how many lines to read.
 #' @param use_fusion_inspector If STAR-Fusion was run with the FusionInpspector
 #'    option, specifying \code{FALSE} will read the fusion objects
-#'    from the 'mini genome' it creates. See \code{\link{importFusionInspector}} and
+#'    from the 'mini genome' it creates. See \code{\link{import_fusion_inspector}} and
 #'    \code{\link{plotFusionReadsSimple}}
 #' @return A list of Fusion objects.
 #'
@@ -88,7 +88,7 @@ import_starfusion <- function (filename, genome_version, limit,
   )
 
   if(use_fusion_inspector)
-      fi.table <- importFusionInspector(limit=limit+10)
+      fi.table <- import_fusion_inspector(limit=limit+10)
 
   # Set variables
   id                   <- NA
