@@ -173,12 +173,12 @@ import_starfusion <- function (filename, genome_version, limit,
     if (use_fusion_inspector) {
         ## override things to go with the FI's virtual 'mini genome', but
         ## first save them:
-        fusion_tool_specific_data[['orig_chromosomeA']] <- chromosome_upstream
-        fusion_tool_specific_data[['orig_breakpointA']] <- breakpoint_upstrezm
-        fusion_tool_specific_data[['orig_strandA']] <- strand_uptream
-        fusion_tool_specific_data[['orig_chromosomeB']] <- chromosome_downstream
-        fusion_tool_specific_data[['orig_breakpointB']] <- breakpoint_downstream
-        fusion_tool_specific_data[['orig_strandB']] <- strand_downstream
+        fusion_tool_specific_data[['orig_chromosome_upstream']] <- chromosome_upstream
+        fusion_tool_specific_data[['orig_breakpoint_upstream']] <- breakpoint_upstream
+        fusion_tool_specific_data[['orig_strand_upstream']] <- strand_uptream
+        fusion_tool_specific_data[['orig_chromosome_downstream']] <- chromosome_downstream
+        fusion_tool_specific_data[['orig_breakpoint_downstream']] <- breakpoint_downstream
+        fusion_tool_specific_data[['orig_strand_downstream']] <- strand_downstream
 
         fusion.name <- report[[i, "#FusionName"]]
         if(fusion.name %in% fi.table$id) {
