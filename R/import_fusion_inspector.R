@@ -16,7 +16,8 @@
 #' @return The report is returned as \code{data.frame}
 #'
 #' @export
-import_fusion_inspector <- function (filename='FusionInspector-inspect/finspector.igv.FusionJuncSpan') {
+import_fusion_inspector <- function (filename='FusionInspector-inspect/finspector.igv.FusionJuncSpan',
+                                     limit) {
     ## Try to read the FusionInspector report.
     ## Within one 'scaffold', only keep the leftmost and rightmost coordinate
     report <- withCallingHandlers({
