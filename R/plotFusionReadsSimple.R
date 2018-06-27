@@ -39,8 +39,8 @@ plotContigReads <- function(fusion,
     ## as plotFusionReads, but with separate tracks for spanning and split
     ## 
     need <- "starfusion+fusioninspector"
-    if (fusion@fusionTool != need)
-      stop("Wrong object type, need: ", need, " got: ",  fusion@fusionTool)
+    if (fusion@fusion_tool != need)
+      stop("Wrong object type, need: ", need, " got: ",  fusion@fusion_tool)
 
     options(ucscChromosomeNames=FALSE)
     spanning <- add_fusion_reads_alignment(fusion, bam.spanning,
