@@ -4,13 +4,15 @@
 \alias{add_fusion_reads_alignment}
 \title{Add fusion reads alignment to fusion object}
 \usage{
-add_fusion_reads_alignment(fusion, bamfile)
+add_fusion_reads_alignment(fusion, bamfile, chromosome = "chrNA")
 }
 \arguments{
 \item{fusion}{The fusion object to add a genomic alignment to.}
 
 \item{bamfile}{The bam file containing the fusion reads plotted to the fusion
 sequence.}
+
+\item{chromosome}{The chromosome to use}
 }
 \value{
 An updated fusion object with fusion@fusion_reads_alignment set.
