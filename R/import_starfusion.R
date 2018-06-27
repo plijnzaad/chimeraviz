@@ -8,7 +8,10 @@
 #' star-fusion.fusion_candidates.final.abridged results file.
 #' @param genome_version Which genome was used in mapping (hg19, hg38, etc.).
 #' @param limit A limit on how many lines to read.
-#'
+#' @param use_fusioninspector If STAR-Fusion was run with the FusionInpspector
+#'    option, specifying \code{FALSE} will read the fusion objects
+#'    from the 'mini genome' it creates. See \code{\link{import_fusioninspector}} and
+#'    \code{\link{plotFusionReadsSimple}}
 #' @return A list of Fusion objects.
 #'
 #' @examples
@@ -20,7 +23,8 @@
 #' # This should import a list of 3 fusions described in Fusion objects.
 #'
 #' @export
-import_starfusion <- function (filename, genome_version, limit) {
+import_starfusion <- function (filename, genome_version, limit,
+                               use_fusioninspector=FALSE) {
 
   # Is the genome version valid?
   valid_genomes <- c("hg19", "hg38", "mm10")
@@ -79,10 +83,13 @@ import_starfusion <- function (filename, genome_version, limit) {
     }
   )
 
+  if(use_fusioninspector)
+      fi.table <- import_fusioninspector(limit=limit+10)
+
   # Set variables
   id                   <- NA
   inframe              <- NA
-  fusion_tool          <- "starfusion"
+  fusion_tool          <- ifelse(use_fusioninspector, "starfusion+fusioninspector", "starfusion")
   spanning_reads_count <- NA
   split_reads_count    <- NA
 
@@ -145,6 +152,31 @@ import_starfusion <- function (filename, genome_version, limit) {
     ensembl_id_upstream <- gene_names_1[2]
     ensembl_id_downstream <- gene_names_2[2]
 
+    if (use_fusioninspector) {
+        ## override things to go with the FI's virtual 'mini genome', but
+        ## first save them:
+        fusion_tool_specific_data[['orig_chromosome_upstream']] <- chromosome_upstream
+        fusion_tool_specific_data[['orig_breakpoint_upstream']] <- breakpoint_upstream
+        fusion_tool_specific_data[['orig_strand_upstream']] <- strand_upstream
+        fusion_tool_specific_data[['orig_chromosome_downstream']] <- chromosome_downstream
+        fusion_tool_specific_data[['orig_breakpoint_downstream']] <- breakpoint_downstream
+        fusion_tool_specific_data[['orig_strand_downstream']] <- strand_downstream
+
+        fusion.name <- report[[i, "#FusionName"]]
+        if(fusion.name %in% fi.table$id) {
+            chromosome_upstream <- fusion.name
+            chromosome_downstream <- fusion.name
+            strand_upstream <- '+'
+            strand_downstream <- '+'
+            breakpoint_upstream <- fi.table[fusion.name, 'start']
+            breakpoint_downstream <- fi.table[fusion.name, 'end']
+        } else {
+            warning(sprintf("Could not find location for fusion %s
+on virtual contig, ignoring it (line %d)", fusion.name, i+1))
+            next
+        }
+    }
+    
     # PartnerGene objects
     gene_upstream <- new(
       Class = "PartnerGene",
