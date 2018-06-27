@@ -239,7 +239,7 @@ plot_fusion_reads <- function(
     grid::popViewport(1)
   }
 
-}                                       #plotFusionReads
+}
 
 .validate_plot_fusion_reads_params <- function(
   fusion,
