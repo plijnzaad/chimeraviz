@@ -42,7 +42,8 @@ import_starfusion <- function (filename, genome_version, limit,
   # Try to read the fusion report
   report <- withCallingHandlers({
       col_types_starfusion <- readr::cols_only(
-        "#FusionName" = col_skip(),
+##        "#FusionName" = col_skip(),
+        "#FusionName" = col_character(), 
         "JunctionReadCount" = col_integer(),
         "SpanningFragCount" = col_integer(),
         "SpliceType" = col_skip(),
@@ -55,7 +56,10 @@ import_starfusion <- function (filename, genome_version, limit,
         "LeftBreakEntropy" = col_number(),
         "RightBreakDinuc" = col_character(),
         "RightBreakEntropy" = col_number(),
-        "FFPM" = col_number()
+        "FFPM" = col_number(),
+        "PROT_FUSION_TYPE" = col_character(),
+        "annots" = col_character(), # e.g. '[SELFIE]'
+        "FUSION_CDS" = col_character() # fusion sequence?
       )
       if (missing(limit)) {
         # Read all lines
@@ -101,6 +105,7 @@ import_starfusion <- function (filename, genome_version, limit,
 
     # Import starfusion-specific fields
     fusion_tool_specific_data <- list()
+    fusion_tool_specific_data[["FusionName"]] = report[[i, "#FusionName"]]
     fusion_tool_specific_data[["LargeAnchorSupport"]] <-
       report[[i, "LargeAnchorSupport"]]
     fusion_tool_specific_data[["LeftBreakDinuc"]] <-
@@ -113,7 +118,20 @@ import_starfusion <- function (filename, genome_version, limit,
       report[[i, "RightBreakEntropy"]]
     fusion_tool_specific_data[["FFPM"]] <-
       report[[i, "FFPM"]]
+    fusion_tool_specific_data[["annots"]] = report[[i, "annots"]]
+    seq <- report[[i, "FUSION_CDS"]] # looks like '...aacgatcgtgaACTGATCGATG...'
 
+    if(!is.null(report$PROT_FUSION_TYPE)) {
+        ## only available when loading from coding_effect file (i.e.
+        ## star-fusion.fusion_predictions.abridged.annotated.coding_effect.tsv)
+        ft <- report[[i, "PROT_FUSION_TYPE"]]
+        fusion_tool_specific_data [["inframe"]] <- ft
+        if (ft == 'INFRAME')
+          inframe <- TRUE
+        if (ft == 'FRAMESHIFT')
+          inframe <- FALSE
+    }
+    
     # id for this fusion
     id <- as.character(i)
 
@@ -214,6 +232,6 @@ on virtual contig, ignoring it (line %d)", fusion.name, i+1))
     )
   }
 
-  # Return the list of Fusion objects
-  fusion_list
+  # Return the list of Fusion objects (without the NULL elements)
+  Filter(function(elt)!is.null(elt), fusion_list)
 }
