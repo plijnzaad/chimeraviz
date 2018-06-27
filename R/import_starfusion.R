@@ -8,9 +8,9 @@
 #' star-fusion.fusion_candidates.final.abridged results file.
 #' @param genome_version Which genome was used in mapping (hg19, hg38, etc.).
 #' @param limit A limit on how many lines to read.
-#' @param use_fusion_inspector If STAR-Fusion was run with the FusionInpspector
+#' @param use_fusioninspector If STAR-Fusion was run with the FusionInpspector
 #'    option, specifying \code{FALSE} will read the fusion objects
-#'    from the 'mini genome' it creates. See \code{\link{import_fusion_inspector}} and
+#'    from the 'mini genome' it creates. See \code{\link{import_fusioninspector}} and
 #'    \code{\link{plotFusionReadsSimple}}
 #' @return A list of Fusion objects.
 #'
@@ -24,7 +24,7 @@
 #'
 #' @export
 import_starfusion <- function (filename, genome_version, limit,
-                               use_fusion_inspector=FALSE) {
+                               use_fusioninspector=FALSE) {
 
   # Is the genome version valid?
   valid_genomes <- c("hg19", "hg38", "mm10")
@@ -87,13 +87,13 @@ import_starfusion <- function (filename, genome_version, limit,
     }
   )
 
-  if(use_fusion_inspector)
-      fi.table <- import_fusion_inspector(limit=limit+10)
+  if(use_fusioninspector)
+      fi.table <- import_fusioninspector(limit=limit+10)
 
   # Set variables
   id                   <- NA
   inframe              <- NA
-  fusion_tool          <- ifelse(use_fusion_inspector, "starfusion+fusioninspector", "starfusion")
+  fusion_tool          <- ifelse(use_fusioninspector, "starfusion+fusioninspector", "starfusion")
   spanning_reads_count <- NA
   split_reads_count    <- NA
 
@@ -170,7 +170,7 @@ import_starfusion <- function (filename, genome_version, limit,
     ensembl_id_upstream <- gene_names_1[2]
     ensembl_id_downstream <- gene_names_2[2]
 
-    if (use_fusion_inspector) {
+    if (use_fusioninspector) {
         ## override things to go with the FI's virtual 'mini genome', but
         ## first save them:
         fusion_tool_specific_data[['orig_chromosome_upstream']] <- chromosome_upstream

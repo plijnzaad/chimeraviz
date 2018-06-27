@@ -5,7 +5,7 @@
 \title{Import results from a STAR-Fusion run into a list of Fusion objects.}
 \usage{
 import_starfusion(filename, genome_version, limit,
-  use_fusion_inspector = FALSE)
+  use_fusioninspector = FALSE)
 }
 \arguments{
 \item{filename}{Filename for the STAR-Fusion
@@ -15,9 +15,9 @@ star-fusion.fusion_candidates.final.abridged results file.}
 
 \item{limit}{A limit on how many lines to read.}
 
-\item{use_fusion_inspector}{If STAR-Fusion was run with the FusionInpspector
+\item{use_fusioninspector}{If STAR-Fusion was run with the FusionInpspector
 option, specifying \code{FALSE} will read the fusion objects
-from the 'mini genome' it creates. See \code{\link{import_fusion_inspector}} and
+from the 'mini genome' it creates. See \code{\link{import_fusioninspector}} and
 \code{\link{plotFusionReadsSimple}}}
 }
 \value{

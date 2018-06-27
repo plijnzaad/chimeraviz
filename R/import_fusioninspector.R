@@ -1,7 +1,7 @@
 #' read the results from runnning FusionInspector
 #'
 #' This function is called when \code{\link{import_star_fusion}} is called
-#' with \code{use_fusion_inspector=TRUE}. It will override coordinates
+#' with \code{use_fusioninspector=TRUE}. It will override coordinates
 #' (chromosome, strand, and breakpoint) with those corresponding to
 #' FusionInspector's "mini genome". The resulting list of fusion objects
 #' can currently only be plotted with \code{\link{plotFusionReadsSimple}}.
@@ -16,7 +16,7 @@
 #' @return The report is returned as \code{data.frame}
 #'
 #' @export
-import_fusion_inspector <- function (filename='FusionInspector-inspect/finspector.igv.FusionJuncSpan',
+import_fusioninspector <- function (filename='FusionInspector-inspect/finspector.igv.FusionJuncSpan',
                                      limit) {
     ## Try to read the FusionInspector report.
     ## Within one 'scaffold', only keep the leftmost and rightmost coordinate
@@ -56,4 +56,4 @@ import_fusion_inspector <- function (filename='FusionInspector-inspect/finspecto
                  end=with(report, tapply(break_right, id, max)))
     rownames(d) <- d$id
     d
-}                                        #import_fusion_inspector
+}                                        #import_fusioninspector
