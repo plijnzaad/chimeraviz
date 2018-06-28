@@ -8,7 +8,10 @@
 #' star-fusion.fusion_candidates.final.abridged results file.
 #' @param genome_version Which genome was used in mapping (hg19, hg38, etc.).
 #' @param limit A limit on how many lines to read.
-#'
+#' @param use_fusioninspector If STAR-Fusion was run with the FusionInpspector
+#'    option, specifying \code{FALSE} will read the fusion objects
+#'    from the 'mini genome' it creates. See \code{\link{import_fusioninspector}} and
+#'    \code{\link{plotFusionReadsSimple}}
 #' @return A list of Fusion objects.
 #'
 #' @examples
@@ -20,7 +23,8 @@
 #' # This should import a list of 3 fusions described in Fusion objects.
 #'
 #' @export
-import_starfusion <- function (filename, genome_version, limit) {
+import_starfusion <- function (filename, genome_version, limit,
+                               use_fusioninspector=FALSE) {
 
   # Is the genome version valid?
   valid_genomes <- c("hg19", "hg38", "mm10")
@@ -38,7 +42,8 @@ import_starfusion <- function (filename, genome_version, limit) {
   # Try to read the fusion report
   report <- withCallingHandlers({
       col_types_starfusion <- readr::cols_only(
-        "#FusionName" = col_skip(),
+##        "#FusionName" = col_skip(),
+        "#FusionName" = col_character(), 
         "JunctionReadCount" = col_integer(),
         "SpanningFragCount" = col_integer(),
         "SpliceType" = col_skip(),
@@ -51,7 +56,10 @@ import_starfusion <- function (filename, genome_version, limit) {
         "LeftBreakEntropy" = col_number(),
         "RightBreakDinuc" = col_character(),
         "RightBreakEntropy" = col_number(),
-        "FFPM" = col_number()
+        "FFPM" = col_number(),
+        "PROT_FUSION_TYPE" = col_character(),
+        "annots" = col_character(), # e.g. '[SELFIE]'
+        "FUSION_CDS" = col_character() # fusion sequence?
       )
       if (missing(limit)) {
         # Read all lines
@@ -79,10 +87,13 @@ import_starfusion <- function (filename, genome_version, limit) {
     }
   )
 
+  if(use_fusioninspector)
+      fi.table <- import_fusioninspector(limit=limit+10)
+
   # Set variables
   id                   <- NA
   inframe              <- NA
-  fusion_tool          <- "starfusion"
+  fusion_tool          <- ifelse(use_fusioninspector, "starfusion+fusioninspector", "starfusion")
   spanning_reads_count <- NA
   split_reads_count    <- NA
 
@@ -94,6 +105,7 @@ import_starfusion <- function (filename, genome_version, limit) {
 
     # Import starfusion-specific fields
     fusion_tool_specific_data <- list()
+    fusion_tool_specific_data[["FusionName"]] = report[[i, "#FusionName"]]
     fusion_tool_specific_data[["LargeAnchorSupport"]] <-
       report[[i, "LargeAnchorSupport"]]
     fusion_tool_specific_data[["LeftBreakDinuc"]] <-
@@ -106,7 +118,20 @@ import_starfusion <- function (filename, genome_version, limit) {
       report[[i, "RightBreakEntropy"]]
     fusion_tool_specific_data[["FFPM"]] <-
       report[[i, "FFPM"]]
+    fusion_tool_specific_data[["annots"]] = report[[i, "annots"]]
+    seq <- report[[i, "FUSION_CDS"]] # looks like '...aacgatcgtgaACTGATCGATG...'
 
+    if(!is.null(report$PROT_FUSION_TYPE)) {
+        ## only available when loading from coding_effect file (i.e.
+        ## star-fusion.fusion_predictions.abridged.annotated.coding_effect.tsv)
+        ft <- report[[i, "PROT_FUSION_TYPE"]]
+        fusion_tool_specific_data [["inframe"]] <- ft
+        if (ft == 'INFRAME')
+          inframe <- TRUE
+        if (ft == 'FRAMESHIFT')
+          inframe <- FALSE
+    }
+    
     # id for this fusion
     id <- as.character(i)
 
@@ -145,6 +170,31 @@ import_starfusion <- function (filename, genome_version, limit) {
     ensembl_id_upstream <- gene_names_1[2]
     ensembl_id_downstream <- gene_names_2[2]
 
+    if (use_fusioninspector) {
+        ## override things to go with the FI's virtual 'mini genome', but
+        ## first save them:
+        fusion_tool_specific_data[['orig_chromosome_upstream']] <- chromosome_upstream
+        fusion_tool_specific_data[['orig_breakpoint_upstream']] <- breakpoint_upstream
+        fusion_tool_specific_data[['orig_strand_upstream']] <- strand_upstream
+        fusion_tool_specific_data[['orig_chromosome_downstream']] <- chromosome_downstream
+        fusion_tool_specific_data[['orig_breakpoint_downstream']] <- breakpoint_downstream
+        fusion_tool_specific_data[['orig_strand_downstream']] <- strand_downstream
+
+        fusion.name <- report[[i, "#FusionName"]]
+        if(fusion.name %in% fi.table$id) {
+            chromosome_upstream <- fusion.name
+            chromosome_downstream <- fusion.name
+            strand_upstream <- '+'
+            strand_downstream <- '+'
+            breakpoint_upstream <- fi.table[fusion.name, 'start']
+            breakpoint_downstream <- fi.table[fusion.name, 'end']
+        } else {
+            warning(sprintf("Could not find location for fusion %s
+on virtual contig, ignoring it (line %d)", fusion.name, i+1))
+            next
+        }
+    }
+    
     # PartnerGene objects
     gene_upstream <- new(
       Class = "PartnerGene",
@@ -182,6 +232,6 @@ import_starfusion <- function (filename, genome_version, limit) {
     )
   }
 
-  # Return the list of Fusion objects
-  fusion_list
+  # Return the list of Fusion objects (without the NULL elements)
+  Filter(function(elt)!is.null(elt), fusion_list)
 }
